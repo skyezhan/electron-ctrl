@@ -33,11 +33,11 @@ const disableAction = computed(() => {
   <div flex="~ col" border="l-1 #00152914" my-4 py-2 px-3 justify-between>
     <AppConfig
       v-if="!props.appId?.startsWith('/')"
-      :session-id="props.appId"
+      :app-id="props.appId"
     />
     <DevConfig
       v-else
-      :session-id="props.appId"
+      :app-id="props.appId"
       :disable-update-port="disableAction"
     />
     <div self-end>

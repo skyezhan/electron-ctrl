@@ -5,14 +5,14 @@ import { startProject } from '../api'
 import { activeSession, devRecord, sessionRecord } from '../store'
 
 const props = defineProps<{
-  sessionId: string
+  appId: string
   disableUpdatePort: boolean
 }>()
 
 const currentScript = ref('')
 
 const scriptOptions = computed(() => {
-  const record = devRecord.value.get(props.sessionId)
+  const record = devRecord.value.get(props.appId)
   if (record?.scripts && record?.manager) {
     return [...record.scripts.keys()].map(script => ({
       label: `${record.manager} ${script}`,
@@ -23,7 +23,7 @@ const scriptOptions = computed(() => {
 })
 
 const runScript = () => {
-  const dev = devRecord.value.get(props.sessionId)
+  const dev = devRecord.value.get(props.appId)
   dev && startProject(dev.manager, currentScript.value, dev.path, activeSession.value)
 }
 

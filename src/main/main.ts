@@ -1,6 +1,4 @@
 import { BrowserWindow, app, dialog, ipcMain } from 'electron'
-import path from 'path'
-import url from 'url'
 import getAvailablePort from 'get-port'
 import { nanoid } from 'nanoid'
 import { IpcEvents } from '../constants'

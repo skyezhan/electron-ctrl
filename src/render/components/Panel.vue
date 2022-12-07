@@ -22,7 +22,6 @@ watchEffect(() => {
       logScrollbarRef.value?.scrollTo({ top: 999999 })
     })
   }
-  console.log(session.value.appId)
 })
 </script>
 
