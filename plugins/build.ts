@@ -18,6 +18,7 @@ export const buildPlugin = () => {
       const oldPkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8'))
       const newPkg = {
         name: oldPkg.name,
+        version: oldPkg.version,
         main: 'main.js',
         devDependencies: {
           electron: oldPkg.devDependencies.electron,
