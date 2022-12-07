@@ -2,9 +2,10 @@
   "name": "enow-ctrl",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "vue-tsc && vite build && electron-builder",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -34,6 +35,19 @@
     "nanoid": "^4.0.0",
     "node-fetch": "^3.3.0",
     "plist": "^3.0.6",
-    "vue": "^3.2.41"
+    "vue": "^3.2.41",
+    "npm": "9.1.3",
+    "yarn": "1.22.19",
+    "pnpm": "7.18.1"
+  },
+  "build": {
+    "appId": "cool.skye.electron",
+    "productName": "Enow CTRL",
+    "directories": {
+      "output": "build",
+      "app": "dist"
+    },
+    "files": ["**"],
+    "asar": false
   }
 }

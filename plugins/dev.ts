@@ -4,16 +4,13 @@ import type { ViteDevServer } from 'vite'
 export const devPlugin = () => ({
   name: 'dev-plugin',
   configureServer(server: ViteDevServer) {
-    const build = (name: string) => {
-      require('esbuild').buildSync({
-        entryPoints: [`./src/main/${name}.ts`],
-        bundle: true,
-        platform: 'node',
-        outfile: `./dist/${name}.js`,
-        external: ['electron'],
-      })
-    }
-    build('main')
+    require('esbuild').buildSync({
+      entryPoints: ['./src/main/main.ts'],
+      bundle: true,
+      platform: 'node',
+      outfile: './dist/main.js',
+      external: ['electron'],
+    })
     server.httpServer?.once('listening', () => {
       const { spawn } = require('child_process')
       const address = server.httpServer!.address() as AddressInfo
@@ -33,7 +30,7 @@ export const devPlugin = () => ({
 })
 
 export const getReplacer = () => {
-  const externalModels = [
+  const modules = [
     'os',
     'fs',
     'path',
@@ -52,7 +49,7 @@ export const getReplacer = () => {
     'shell',
     'webFrame',
   ]
-  return externalModels.reduce((obj, item) => {
+  return modules.reduce((obj, item) => {
     obj[item] = () => ({
       find: new RegExp(`^${item}$`),
       code: item === 'electron'
