@@ -7,11 +7,12 @@ import { IpcEvents } from '../constants'
 import type { AppInfo, PageInfo } from '../types'
 import type { Adapter } from './platform'
 import { MacosAdapter } from './platform'
-import type { ChildProcessWithoutNullStreams } from 'child_process'
+import type { ChildProcess } from 'child_process'
 import { spawn } from 'child_process'
 import CDP from 'chrome-remote-interface'
 import fetch from 'node-fetch'
 import fs from 'fs'
+import { registerScheme } from './custom'
 
 let mainWindow: BrowserWindow
 let adapter: Adapter
@@ -39,7 +40,7 @@ const detectApps = async () => {
 }
 
 const startDebugging = async (
-  sp: ChildProcessWithoutNullStreams,
+  sp: ChildProcess,
   id: string,
   sessionId = '',
   nodePort = 0,
@@ -63,8 +64,8 @@ const startDebugging = async (
     })
   }
 
-  sp.stdout.on('data', data => handleStdout(data))
-  sp.stderr.on('data', data => handleStdout(data))
+  sp.stdout?.on('data', data => handleStdout(data))
+  sp.stderr?.on('data', data => handleStdout(data))
 
   sendMessageToMainWindow(IpcEvents.session, {
     type: 'new',
@@ -87,14 +88,18 @@ const startApp = async (id: string, exe: string) => {
   const app = spawn(
     exe,
     [`--inspect=${nodePort}`, `--remote-debugging-port=${windowPort}`],
-    { cwd: '/', detached: true },
+    { cwd: '/' },
   )
 
   startDebugging(app, id, '', nodePort, windowPort)
 }
 
 const startProject = (manager: string, script: string, cwd: string, sessionId: string) => {
-  const app = spawn(manager, [script], { cwd })
+  const app = spawn(
+    manager,
+    [script],
+    { stdio: 'inherit', cwd },
+  )
   startDebugging(app, cwd, sessionId)
 }
 
@@ -225,12 +230,10 @@ const createWindow = () => {
 
   if (process.argv[2]) {
     mainWindow.loadURL(process.argv[2])
+    mainWindow.webContents.openDevTools({ mode: 'undocked' })
   } else {
-    mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, './index.html'),
-      protocol: 'file:',
-      slashes: true,
-    }))
+    registerScheme()
+    mainWindow.loadURL('app://index.html')
   }
 }
 
