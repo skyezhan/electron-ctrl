@@ -4,6 +4,7 @@ import VueJsx from '@vitejs/plugin-vue-jsx'
 import Unocss from 'unocss/vite'
 import optimizer from 'vite-plugin-optimizer'
 import { devPlugin, getReplacer } from './plugins/dev'
+import { buildPlugin } from './plugins/build'
 
 export default defineConfig({
   plugins: [
@@ -15,7 +16,7 @@ export default defineConfig({
   ],
   build: {
     rollupOptions: {
-      plugins: [],
+      plugins: [buildPlugin()],
     },
   },
 })
