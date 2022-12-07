@@ -112,8 +112,9 @@ const importProject = async () => {
     localStorage.setItem('dev-project', JSON.stringify(localProject))
     updateDevRecord()
     window.$message?.success('导入成功')
+  } else {
+    window.$message?.error('只能导入electron工程!')
   }
-  window.$message?.error('只能导入electron工程!')
 }
 </script>
 
